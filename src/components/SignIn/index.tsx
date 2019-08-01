@@ -6,14 +6,18 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { FormComponent, IStateForm } from 'components/Abstract/FormComponent';
 import { IStyledProps, WithStyles } from 'decorators/withStyles';
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import authService from 'services/auth';
 
-// import Link from '@material-ui/core/Link';
+interface ISignIn {
+  email?: string,
+  password?: string,
+}
 interface IProps extends IStyledProps { }
-
-interface IState { }
+interface IState extends IStateForm<ISignIn> { }
 
 @WithStyles(theme => ({
   '@global': {
@@ -40,13 +44,23 @@ interface IState { }
   },
 }))
 
-export default class SignIn extends Component<IProps, IState> {
+export default class SignIn extends FormComponent<IProps, IState> {
+  componentWillMount() {
+    this.setState({
+      model: {
+        email: null,
+        password: null,
+      }
+    }
+    );
+  }
 
-  handleSubmit(event: any) {
+  handleSubmit = (event: any) => {
     event.preventDefault();
-    // const data = new FormData(event.target);
-    console.log(event.target.email.value);
-    console.log(event.target.password.value);
+    authService.login(
+      this.state.model.email,
+      this.state.model.password
+    );
   }
 
   render() {
@@ -73,6 +87,7 @@ export default class SignIn extends Component<IProps, IState> {
               type='email'
               autoComplete='email'
               autoFocus
+              onChange={this.updateModel((m, v) => m.email = v)}
             />
             <TextField
               variant='outlined'
@@ -87,6 +102,8 @@ export default class SignIn extends Component<IProps, IState> {
                 minLength: 5,
               }}
               autoComplete='current-password'
+              onChange={this.updateModel((m, v) => m.password = v)}
+
             />
             <Button
               type='submit'
