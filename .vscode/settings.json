@@ -1,0 +1,42 @@
+{
+  "files.exclude": {
+    "build": true,
+    "**/*.css": {
+      "when": "$(basename).scss"
+    },
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*?.js": {
+      "when": "$(basename).tsx"
+    },
+    "**/*.lock.json": true,
+    "**/*.map": {
+      "when": "$(basename)"
+    },
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.tmp": true,
+    "**/bin/**": true,
+    "**/obj/**": true
+  },
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "typescriptHero.imports.organizeOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.autoClosingTags": false,
+  "html.autoClosingTags": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    { "language": "typescript", "autoFix": true },
+    { "language": "typescriptreact", "autoFix": true }
+  ],
+  "typescriptHero.imports.ignoredFromRemoval": [
+    "react",
+    "settings"
+  ],
+  "files.autoSave": "off"
+}
