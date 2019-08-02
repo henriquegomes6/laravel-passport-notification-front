@@ -6,8 +6,8 @@ import { createStyles, Theme } from '@material-ui/core/styles';
 import { IRouteProps } from 'decorators/withRouter';
 import React, { Component } from 'react';
 
-import { WithStyles } from '../../decorators/withStyles';
-import authService from '../../services/auth';
+import { WithStyles } from 'decorators/withStyles';
+import authService from 'services/auth';
 
 interface IProps extends IRouteProps {
   classes?: any,
@@ -66,7 +66,6 @@ export default class VerifyEmail extends Component<IProps, IState> {
   render() {
     const { classes } = this.props;
     const { loading, checkEmailFail } = this.state;
-    console.log({ loading, checkEmailFail });
     return (
       <Grid>
         <Grid className={classes.alignCenter}>

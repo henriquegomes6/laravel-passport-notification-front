@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { enLocalStorageKeys } from 'enums/enLocalStorageKeys';
-import { localStorageSetItem } from 'helpers';
+import { localStorageGetItem, localStorageSetItem } from 'helpers';
 
 import apiService from './api';
 
@@ -12,6 +12,13 @@ class AuthService {
     );
   }
 
+  public async signUp(name: string, email: string, password: string) {
+    const password_confirmation = password;
+    return await this.makeLogin(
+      await apiService.post('/api/register', { name, email, password, password_confirmation })
+    );
+  }
+
   public async verifyToken(token: string) {
     const result = await apiService.post(`/api/verify/${token}`, { token })
 
@@ -20,6 +27,30 @@ class AuthService {
     }
 
     return false;
+  }
+
+  public async updateName(name: string) {
+    return await apiService.put('/api/user', { name });
+  }
+
+  public async getUser() {
+    return await apiService.get('/api/user');
+  }
+
+  public async deleteUser() {
+    await apiService.delete('/api/user');
+    localStorageSetItem(enLocalStorageKeys.token, {});
+    return;
+  }
+
+  public checkIsLogin() {
+    const token = localStorageGetItem(enLocalStorageKeys.token);
+
+    if (!token.access_token) {
+      return false;
+    }
+
+    return true;
   }
 
   private async makeLogin(values: AxiosResponse) {

@@ -11,20 +11,17 @@ import Confirm from 'components/Shared/Confirm';
 import { IRouteProps } from 'decorators/withRouter';
 import { WithStyles } from 'decorators/withStyles';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import authService from 'services/auth';
 
-interface ISignUp {
+interface IUser {
   name?: string,
-  email?: string,
-  password?: string,
 }
 
 interface IProps extends IRouteProps {
   classes?: any,
 }
 
-interface IState extends IStateForm<ISignUp> {
+interface IState extends IStateForm<IUser> {
   sending: boolean,
   hasMsg: boolean,
   msg: {
@@ -60,12 +57,12 @@ interface IState extends IStateForm<ISignUp> {
   },
 }))
 
-export default class SignUp extends FormComponent<IProps, IState>{
+export default class WelCome extends FormComponent<IProps, IState>{
 
   constructor(props: any) {
     super(props);
     this.state = {
-      sending: false,
+      sending: true,
       hasMsg: false,
       msg: {
         title: '',
@@ -73,13 +70,12 @@ export default class SignUp extends FormComponent<IProps, IState>{
         buttonText: ''
       },
       model: {
-        name: null,
-        email: null,
-        password: null,
+        name: '',
       },
       onClickClose: () => { },
-
     };
+
+    this.loadData();
   }
 
   handleSubmit = (event: any) => {
@@ -88,20 +84,20 @@ export default class SignUp extends FormComponent<IProps, IState>{
       sending: true,
     });
 
-    authService.signUp(
+    authService.updateName(
       this.state.model.name,
-      this.state.model.email,
-      this.state.model.password
     ).then((value) => {
       this.setState({
         sending: false,
         hasMsg: true,
+        model: {
+          name: value.data.name,
+        },
         msg: {
           title: 'Sucesso',
-          text: 'Conta criada com sucesso, verifique seu email para confirmação',
+          text: 'Conta atualizada com sucesso',
           buttonText: 'OK',
         },
-        onClickClose: this.handleRedirect,
       });
     }).catch((value) => {
       this.setState({
@@ -109,21 +105,57 @@ export default class SignUp extends FormComponent<IProps, IState>{
         hasMsg: true,
         msg: {
           title: 'Erro',
-          text: 'Erro ao criar a conta',
+          text: 'Erro ao atualizar a conta',
           buttonText: 'OK',
         },
-        onClickClose: () => { },
       });
     });
   }
 
-  handleRedirect = () => {
-    this.props.history.push('/');
+  loadData = () => {
+    authService.getUser()
+      .then((value) => {
+        this.setState({
+          sending: false,
+          model: {
+            name: value.data.name,
+          },
+        });
+      })
+      .catch((value) => {
+        this.setState({
+          sending: true,
+          hasMsg: true,
+          msg: {
+            title: 'Erro',
+            text: 'Erro ao pegar informações da conta',
+            buttonText: 'OK',
+          },
+        });
+      });
+  }
+
+  handleDelete = () => {
+    authService.deleteUser()
+      .then((value) => {
+        window.location.reload();
+      })
+      .catch((value) => {
+        this.setState({
+          sending: true,
+          hasMsg: true,
+          msg: {
+            title: 'Erro',
+            text: 'Erro ao deletar',
+            buttonText: 'OK',
+          },
+        });
+      });
   }
 
   render() {
     const { classes } = this.props;
-    const { sending, hasMsg, msg, onClickClose } = this.state;
+    const { sending, hasMsg, msg, onClickClose, model } = this.state;
     return (
       <Container component='main' maxWidth='xs' >
         {
@@ -136,7 +168,7 @@ export default class SignUp extends FormComponent<IProps, IState>{
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
-            Cadastro
+            Bem-vindo ao sistema!
           </Typography>
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <Grid container spacing={2}>
@@ -152,37 +184,9 @@ export default class SignUp extends FormComponent<IProps, IState>{
                   autoFocus
                   onChange={this.updateModel((m, v) => m.name = v)}
                   disabled={sending}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant='outlined'
-                  required
-                  fullWidth
-                  id='email'
-                  label='Email'
-                  name='email'
-                  type='email'
-                  autoComplete='email'
-                  onChange={this.updateModel((m, v) => m.email = v)}
-                  disabled={sending}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant='outlined'
-                  required
-                  fullWidth
-                  name='password'
-                  label='Senha'
-                  type='password'
-                  id='password'
                   inputProps={{
-                    minLength: 5,
+                    value: model.name
                   }}
-                  onChange={this.updateModel((m, v) => m.password = v)}
-                  autoComplete='current-password'
-                  disabled={sending}
                 />
               </Grid>
             </Grid>
@@ -194,15 +198,19 @@ export default class SignUp extends FormComponent<IProps, IState>{
               className={classes.submit}
               disabled={sending}
             >
-              Cadastrar
+              Salvar
           </Button>
-            <Grid container justify='flex-end'>
-              <Grid item>
-                <Link to='/'>
-                  Você já tem uma conta? Entre aqui!!!
-              </Link>
-              </Grid>
-            </Grid>
+            <Button
+              type='button'
+              fullWidth
+              variant='contained'
+              color='secondary'
+              className={classes.submit}
+              disabled={sending}
+              onClick={this.handleDelete}
+            >
+              Deletar
+          </Button>
           </form>
         </div>
       </Container>

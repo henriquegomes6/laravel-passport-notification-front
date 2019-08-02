@@ -1,4 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { enLocalStorageKeys } from 'enums/enLocalStorageKeys';
+import { localStorageGetItem } from 'helpers';
 
 import { API_ENDPOINT } from '../settings';
 
@@ -25,18 +27,16 @@ class ApiService {
     url: string,
     data: any = null
   ) {
-    const contentType = {
-      'Content-Type': 'application/json',
-    };
-
-    let token = {};
-
-    if (false) {
-      token = {
-        Authorization: 'sasasa'
-      };
+    const token = localStorageGetItem(enLocalStorageKeys.token);
+    let auth = null;
+    if (!!token.access_token) {
+      auth = 'Bearer ' + (token as any).access_token;
     }
 
+    const contentType = {
+      'Content-Type': 'application/json',
+      'Authorization': auth as any,
+    };
     const headers = { ...contentType, ...token };
 
     return axios.request({

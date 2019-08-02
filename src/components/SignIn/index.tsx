@@ -7,12 +7,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { FormComponent, IStateForm } from 'components/Abstract/FormComponent';
+import { IRouteProps } from 'decorators/withRouter';
+import { WithStyles } from 'decorators/withStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import authService from 'services/auth';
-
-import { IRouteProps } from '../../decorators/withRouter';
-import { WithStyles } from '../../decorators/withStyles';
 
 interface ISignIn {
   email?: string,
