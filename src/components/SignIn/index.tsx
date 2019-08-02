@@ -7,16 +7,20 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { FormComponent, IStateForm } from 'components/Abstract/FormComponent';
-import { IStyledProps, WithStyles } from 'decorators/withStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import authService from 'services/auth';
+
+import { IRouteProps } from '../../decorators/withRouter';
+import { WithStyles } from '../../decorators/withStyles';
 
 interface ISignIn {
   email?: string,
   password?: string,
 }
-interface IProps extends IStyledProps { }
+interface IProps extends IRouteProps {
+  classes?: any,
+}
 interface IState extends IStateForm<ISignIn> { }
 
 @WithStyles(theme => ({
@@ -45,22 +49,25 @@ interface IState extends IStateForm<ISignIn> { }
 }))
 
 export default class SignIn extends FormComponent<IProps, IState> {
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       model: {
         email: null,
         password: null,
       }
-    }
-    );
+    });
   }
 
-  handleSubmit = (event: any) => {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
-    authService.login(
+    const result = await authService.login(
       this.state.model.email,
       this.state.model.password
     );
+
+    if (result) {
+      this.props.history.push('/verify/asdasdad');
+    }
   }
 
   render() {

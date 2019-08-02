@@ -4,36 +4,34 @@ import { API_ENDPOINT } from '../settings';
 
 
 class ApiService {
-  public get<T = any>(url: string, params?: any) {
-    return this.request<T>('GET', url, params);
+  public get(url: string, params?: any) {
+    return this.request('GET', url, params);
   }
 
-  public post<T = any>(url: string, body: any = {}) {
-    return this.request<T>('POST', url, body);
+  public post(url: string, body: any = {}) {
+    return this.request('POST', url, body);
   }
 
-  public put<T = any>(url: string, body: any = {}) {
-    return this.request<T>('PUT', url, body);
+  public put(url: string, body: any = {}) {
+    return this.request('PUT', url, body);
   }
 
-  public delete<T = any>(url: string, params?: any) {
-    return this.request<T>('DELETE', url, params);
+  public delete(url: string, params?: any) {
+    return this.request('DELETE', url, params);
   }
 
-  private request<T = any>(
+  private request(
     method: string,
     url: string,
-    data: any = null,
-    retry: boolean = true
+    data: any = null
   ) {
-
     const contentType = {
       'Content-Type': 'application/json',
     };
 
     let token = {};
 
-    if (true) {
+    if (false) {
       token = {
         Authorization: 'sasasa'
       };
