@@ -7,7 +7,7 @@ import WelCome from '../WelCome';
 const PrivateRoute = () => {
   return (
     <div>
-      <Route path='/' component={WelCome} />
+      <Route exact={true} path='/' component={WelCome} />
     </div>
   );
 }

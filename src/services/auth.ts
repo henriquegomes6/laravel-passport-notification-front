@@ -46,11 +46,11 @@ class AuthService {
   public checkIsLogin() {
     const token = localStorageGetItem(enLocalStorageKeys.token);
 
-    if (!token.access_token) {
-      return false;
+    if (token && typeof token.access_token !== undefined) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   private async makeLogin(values: AxiosResponse) {

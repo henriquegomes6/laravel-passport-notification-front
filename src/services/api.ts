@@ -29,13 +29,13 @@ class ApiService {
   ) {
     const token = localStorageGetItem(enLocalStorageKeys.token);
     let auth = null;
-    if (!!token.access_token) {
+    if (token && typeof token.access_token !== undefined) {
       auth = 'Bearer ' + (token as any).access_token;
     }
 
     const contentType = {
       'Content-Type': 'application/json',
-      'Authorization': auth as any,
+      'Authorization': auth as string,
     };
     const headers = { ...contentType, ...token };
 

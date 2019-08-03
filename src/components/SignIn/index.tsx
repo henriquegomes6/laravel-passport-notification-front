@@ -65,7 +65,7 @@ export default class SignIn extends FormComponent<IProps, IState> {
     );
 
     if (result) {
-      this.props.history.push('/verify/asdasdad');
+      window.location.reload();
     }
   }
 

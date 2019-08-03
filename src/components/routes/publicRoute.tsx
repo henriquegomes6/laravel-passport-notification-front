@@ -9,8 +9,8 @@ const PublicRoute = () => {
   return (
     <div>
       <Route path='/verify/:token' component={VerifyEmail} />
-      <Route path='/signup' component={SignUp} />
-      <Route path='/' component={SignIn} />
+      <Route exact={true} path='/signup' component={SignUp} />
+      <Route exact={true} path='/' component={SignIn} />
     </div>
   );
 }
